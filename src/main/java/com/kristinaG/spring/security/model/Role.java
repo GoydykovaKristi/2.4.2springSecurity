@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -20,16 +23,24 @@ public class Role implements GrantedAuthority {
     @Column(name = "name")
     private String name;
 
-//    @ManyToMany
-//    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "role_id"),
-//            inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private Set<User> users;
+    @Transient
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 
 
     public Role() {
     }
 
     public Role(String name) {
+        this.name = name;
+    }
+
+    public Role(Long id) {
+        this.id = id;
+    }
+
+    public Role(Long id, String name) {
+        this.id = id;
         this.name = name;
     }
 
@@ -46,6 +57,10 @@ public class Role implements GrantedAuthority {
     }
     public String getName() {
         return name;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 
 
